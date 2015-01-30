@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h1>Login</h1>
+
+    <form action="{{ url_for('login') }}" method="POST" >
+    {{ form.hidden_tag() }}
+    <table>
+        {% for message in get_flashed_messages() %}
+        <tr>
+            <td colspan="2"> {{ message }} </td>
+        </tr>
+        {% endfor %}
+        <tr>
+            <td>Usuario</td>
+            <td>{{ form.user }}
+            {% for error in form.user.errors %}
+            <span style="color:red;">[ {{ error }} ]</span>
+            {% endfor %}</td>
+        </tr>
+        <tr>
+            <td>Senha</td>
+            <td>{{ form.key }}
+            {% for error in form.key.errors %}
+            <span style="color:red;">[ {{ error }} ]</span>
+            {% endfor %}</td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Login" /></td>
+        </tr>
+    </table>
+    </form>
+{% endblock %}
