@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.login import LoginManager, login_user, logout_user, current_user, login_required
 # from wtforms import TextField, PasswordField
-# from enums import *
+from enums import *
 
 import hashlib
 
@@ -11,16 +11,10 @@ from flask.ext.bootstrap import Bootstrap
 from flask.ext.wtf import Form
 from wtforms.fields import TextField, StringField, SubmitField, PasswordField
 from wtforms.validators import Required
-<<<<<<< HEAD
-=======
-from enums import *
-import MySQLdb
-import hashlib
->>>>>>> 769115b72b813cb085a6441ba38381899891b765
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Testando'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:mysql@localhost:3306/gerenciador_de_tarefas'
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:mysql@localhost:3306/gerenciador_de_tarefas"
 
 Bootstrap(app)
 
@@ -35,9 +29,9 @@ class Usuario(db.Model):
 
     __tablename__ = 'usuario'
     codigo = db.Column('codigo',db.Integer, primary_key=True, autoincrement=True)
-    login = db.Column('login',db.String)
-    senha = db.Column('senha',db.String)
-    email = db.Column('email',db.String)
+    login = db.Column('login',db.String(30))
+    senha = db.Column('senha',db.String(30))
+    email = db.Column('email',db.String(100))
 
     def __init__(self,login,senha,email):
         self._cod = contador_de_codigos
@@ -84,8 +78,8 @@ class Usuario(db.Model):
 class Tarefa(db.Model):
     __tablename__ = 'tarefa'
     codigo = db.Column('codigo',db.Integer, primary_key=True, autoincrement=True)
-    titulo = db.Column('titulo',db.String)
-    descricao = db.Column('descricao',db.String)
+    titulo = db.Column('titulo',db.String(30))
+    descricao = db.Column('descricao',db.String(500))
     data_limite = db.Column('data_limite',db.Date)
     status = db.Column('status',db.Integer)
     prioridade = db.Column('prioridade',db.Integer)
