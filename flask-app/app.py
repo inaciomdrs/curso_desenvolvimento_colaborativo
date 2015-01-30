@@ -17,6 +17,7 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
+<<<<<<< HEAD
 class Tarefa:
     def __init__(self,titulo,descricao,data_limite,prioridade=Prioridade.baixa):
         self._titulo = titulo
@@ -107,18 +108,24 @@ class Usuario:
     def email(self, value):
         self._email = value
 
+=======
+>>>>>>> 06265282cdeeac5156d53cbc73a588c403993394
 
 class LoginForm(Form):
     user = TextField('user', validators=[Required()])
     key = PasswordField('key', validators=[Required()])
 
-@app.route("/")
-def home():
-    return "Main Page"
+class RegisterForm(Form):
+    user = TextField('user', validators=[Required()])
+    email = TextField('email', validators=[Required()])
+    key = PasswordField('key', validators=[Required()])
+    key_confirm = PasswordField('key_confirm', validators=[Required()])
 
 @app.route("/register/")
 def register():
-    return "Registro"
+    form = RegisterForm()
+
+    return render_template('register.html', form=form, title='Register')
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -140,6 +147,11 @@ def login():
 def logout():
     logout_user()
     return redirect( url_for('login') )
+
+@app.route("/")
+@login_required
+def home():
+    return "Main Page"
 
 @app.route("/tarefas/")
 @login_required
@@ -171,4 +183,5 @@ def detalhar_tarefa(id):
 def editar_tarefa(id):
     return "Editar tarefa"
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
