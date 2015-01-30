@@ -4,14 +4,109 @@ from flask.ext.login import LoginManager, login_user, logout_user, current_user,
 from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField
 from wtforms.validators import Required
+from enums import *
 import hashlib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'Testando'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqldb://root:mysql@localhost[:3306]/gerenciador_de_tarefas'
+
+db = SQLAlchemy(app)
 
 lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
+
+class Tarefa:
+    def __init__(self,titulo,descricao,data_limite,prioridade=Prioridade.baixa):
+        self._titulo = titulo
+        self._descricao = descricao
+        self._data_limite = data_limite
+        self._status = Status.pendente
+        self._prioridade = prioridade
+
+    def __str__(self):
+        return self._titulo + " (" + self._prioridade + ")"
+
+    @property
+    def titulo(self):
+        return self._titulo
+    @titulo.setter
+    def titulo(self, value):
+        self._titulo = value
+
+    @property
+    def descricao(self):
+        return self._descricao
+    @descricao.setter
+    def descricao(self, value):
+        self._descricao = value
+
+    @property
+    def data_limite(self):
+        return self._data_limite
+    @data_limite.setter
+    def data_limite(self, value):
+        self._data_limite = value
+    
+    @property
+    def status(self):
+        return self._status
+    @status.setter
+    def status(self, value):
+        self._status = value
+    
+    @property
+    def prioridade(self):
+        return self._prioridade
+    @prioridade.setter
+    def prioridade(self, value):
+        self._prioridade = value
+
+class Usuario:
+    contador_de_codigos = 1
+
+    def __init__(self,login,senha,email):
+        self._cod = contador_de_codigos
+        self._login = login
+        self._senha = senha
+        self._email = email
+        self._tarefas = []
+
+        contador_de_codigos += 1
+
+    def __str__(self):
+        return self._login + " (" + self._email + ")"
+
+    @property
+    def cod(self):
+        return self._cod
+
+    @property
+    def tarefas(self):
+        return self._tarefas
+    
+    @property
+    def login(self):
+        return self._login
+    @login.setter
+    def login(self, value):
+        self._login = value
+    
+    @property
+    def senha(self):
+        return self._senha
+    @senha.setter
+    def senha(self, value):
+        self._senha = value
+    
+    @property
+    def email(self):
+        return self._email
+    @email.setter
+    def email(self, value):
+        self._email = value
+
 
 class LoginForm(Form):
     user = TextField('user', validators=[Required()])
